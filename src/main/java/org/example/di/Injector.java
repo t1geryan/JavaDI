@@ -7,6 +7,9 @@ public class Injector {
     private final Properties config;
 
     public Injector(Properties config) {
+        if (config == null) {
+            throw new NullPointerException("Config is null");
+        }
         this.config = config;
     }
 
@@ -25,10 +28,10 @@ public class Injector {
                         field.setAccessible(true);
                         field.set(instance, dependencyInstance);
                     } catch (Exception e) {
-                        throw new RuntimeException("There is error while providing dependency for " + instance.getClass().getName(), e);
+                        throw new IllegalStateException("There is error while providing dependency for " + instance.getClass().getName(), e);
                     }
                 } else {
-                    throw new RuntimeException("There is no declared implementation of " + fieldType.getName());
+                    throw new IllegalStateException("There is no declared implementation of " + fieldType.getName());
                 }
             }
         }
